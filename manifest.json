@@ -1,0 +1,197 @@
+{
+  "id": "ai-provider-kimi-coding-plan",
+  "name": "Kimi Coding Plan",
+  "version": "0.2.0",
+  "types": ["ai-provider"],
+  "permissions": [],
+  "risk_level": "low",
+  "triggers": [],
+  "entrypoints": {
+    "ai_provider": "ai_provider_kimi_coding_plan.driver.build_driver"
+  },
+  "capabilities": {
+    "ai_provider": {
+      "adapter_code": "kimi-coding-plan",
+      "display_name": "Kimi Coding Plan",
+      "branding": {
+        "logo_resource": "resources/logo.svg",
+        "logo_resource_dark": "resources/logo.svg",
+        "description_resource": "resources/description.json"
+      },
+      "field_schema": [
+        {
+          "key": "display_name",
+          "label": "显示名称",
+          "field_type": "text",
+          "required": true,
+          "placeholder": "Kimi Coding Plan 主账号",
+          "help_text": "这是当前家庭里看到的名称。",
+          "default_value": null,
+          "options": []
+        },
+        {
+          "key": "provider_code",
+          "label": "供应商编码",
+          "field_type": "text",
+          "required": true,
+          "placeholder": "family-kimi-coding-main",
+          "help_text": "建议保持唯一，避免和别的供应商配置冲突。",
+          "default_value": null,
+          "options": []
+        },
+        {
+          "key": "base_url",
+          "label": "Base URL",
+          "field_type": "select",
+          "required": false,
+          "placeholder": null,
+          "help_text": "优先使用官方 Coding 专用 Anthropic 兼容地址；历史 Moonshot Anthropic 兼容地址也保留作兼容选项。",
+          "default_value": "https://api.kimi.com/coding",
+          "options": [
+            {
+              "label": "Kimi Code 专用地址",
+              "value": "https://api.kimi.com/coding"
+            },
+            {
+              "label": "Moonshot Anthropic 兼容地址",
+              "value": "https://api.moonshot.cn/anthropic"
+            }
+          ]
+        },
+        {
+          "key": "secret_ref",
+          "label": "API Key",
+          "field_type": "secret",
+          "required": true,
+          "placeholder": "env://KIMI_CODING_API_KEY",
+          "help_text": "这里要填 Kimi Coding Plan 专用 API Key，不要复用普通 Moonshot Key。",
+          "default_value": null,
+          "options": []
+        },
+        {
+          "key": "model_name",
+          "label": "模型名称",
+          "field_type": "text",
+          "required": true,
+          "placeholder": "kimi-for-coding",
+          "help_text": "默认用官方 Coding 模型，优先稳定速度，不主动切到 Thinking 模式模型。",
+          "default_value": "kimi-for-coding",
+          "options": []
+        },
+        {
+          "key": "privacy_level",
+          "label": "隐私级别",
+          "field_type": "select",
+          "required": true,
+          "placeholder": null,
+          "help_text": "公网云通常就够了。",
+          "default_value": "public_cloud",
+          "options": [
+            {
+              "label": "公网云",
+              "value": "public_cloud"
+            },
+            {
+              "label": "私有云",
+              "value": "private_cloud"
+            }
+          ]
+        },
+        {
+          "key": "latency_budget_ms",
+          "label": "延迟预算(ms)",
+          "field_type": "number",
+          "required": false,
+          "placeholder": "15000",
+          "help_text": "留空就走系统默认值。",
+          "default_value": 15000,
+          "options": []
+        },
+        {
+          "key": "temperature",
+          "label": "Temperature",
+          "field_type": "number",
+          "required": false,
+          "placeholder": "0.2",
+          "help_text": "需要稳定、快速时建议保持低温度。",
+          "default_value": "0.2",
+          "options": []
+        },
+        {
+          "key": "max_tokens",
+          "label": "Max Tokens",
+          "field_type": "number",
+          "required": false,
+          "placeholder": "256",
+          "help_text": "默认按速度优先，长回答再手动调大。",
+          "default_value": 256,
+          "options": []
+        },
+        {
+          "key": "anthropic_version",
+          "label": "Anthropic Version",
+          "field_type": "text",
+          "required": false,
+          "placeholder": "2023-06-01",
+          "help_text": "默认用兼容版本即可，一般不用改。",
+          "default_value": "2023-06-01",
+          "options": []
+        }
+      ],
+      "config_ui": {
+        "field_order": [
+          "display_name",
+          "base_url",
+          "secret_ref",
+          "model_name",
+          "anthropic_version",
+          "privacy_level",
+          "latency_budget_ms",
+          "temperature",
+          "max_tokens"
+        ],
+        "hidden_fields": ["provider_code"],
+        "sections": [
+          {
+            "key": "connection",
+            "title": "连接信息",
+            "description": "只填官方 Coding 兼容地址和 API Key。",
+            "fields": ["display_name", "base_url", "secret_ref", "anthropic_version"]
+          },
+          {
+            "key": "runtime",
+            "title": "运行参数",
+            "description": "默认按加快回复速度收口，快任务会自动缩短上下文和输出长度。",
+            "fields": ["model_name", "privacy_level", "latency_budget_ms", "temperature", "max_tokens"]
+          }
+        ],
+        "actions": []
+      },
+      "model_discovery": {
+        "enabled": false,
+        "action_key": null,
+        "depends_on_fields": [],
+        "target_field": null,
+        "debounce_ms": 500,
+        "empty_state_text": null,
+        "discovery_hint_text": null,
+        "discovering_text": null,
+        "discovered_text_template": null
+      },
+      "supported_model_types": ["llm"],
+      "llm_workflow": "anthropic_messages",
+      "runtime_capability": {
+        "transport_type": "native_sdk",
+        "api_family": "anthropic_messages",
+        "default_privacy_level": "public_cloud",
+        "default_supported_capabilities": ["text"]
+      }
+    }
+  },
+  "compatibility": {
+    "provider_profile_schema_version": 1,
+    "transport_type": "native_sdk",
+    "api_family": "anthropic_messages",
+    "description": "Kimi Coding Plan 的官方插件接入，默认走专用 Coding Anthropic 兼容端点。"
+  }
+}

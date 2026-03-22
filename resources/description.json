@@ -1,0 +1,4 @@
+{
+  "zh-CN": "Kimi Coding Plan 插件。保留 Anthropic 兼容协议，但把模型默认值、上下文裁剪和快任务输出收口都下沉到插件侧，不再复用内置 Kimi driver。",
+  "en-US": "Kimi Coding Plan plugin with Anthropic-compatible protocol, plugin-side model defaults, context trimming, and fast-task output caps."
+}
