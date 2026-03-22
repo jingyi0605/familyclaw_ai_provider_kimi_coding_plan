@@ -1,13 +1,13 @@
 {
   "id": "ai-provider-kimi-coding-plan",
   "name": "Kimi Coding Plan",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "types": ["ai-provider"],
   "permissions": [],
   "risk_level": "low",
   "triggers": [],
   "entrypoints": {
-    "ai_provider": "ai_provider_kimi_coding_plan.driver.build_driver"
+    "ai_provider": "driver.build_driver"
   },
   "capabilities": {
     "ai_provider": {
@@ -189,6 +189,7 @@
     }
   },
   "compatibility": {
+    "min_app_version": "0.1.0",
     "provider_profile_schema_version": 1,
     "transport_type": "native_sdk",
     "api_family": "anthropic_messages",
